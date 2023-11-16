@@ -1,8 +1,6 @@
-import numpy as np
-import pandas as pd
-import os
 import datetime as dt
 from dateutil import relativedelta as rd
+import numpy as np
 from scipy import stats as spstat
 from matplotlib import pyplot as plt
 from numpy import random as rdm
@@ -15,7 +13,7 @@ def update_in_grid(grid,date_df,ki_dict):
         # insprct if knock in
         if d not in df.index:
             break
-        date_df.loc[d, "ki"] = (date_df.loc[d, "close"] <= ki_dict[d]).copy()
+        date_df.loc[d, "ki"] = date_df.loc[d, "close"] <= ki_dict[d]
         if date_df.loc[d, "ki"]:
             delta = (d - Ob_date).days
             grid[:,delta:] = 0
@@ -29,7 +27,7 @@ def update_out_grid(grid,date_df,ko_dict):
         # inspect if knock out
         if d not in df.index:
             break
-        date_df.loc[d,"ko"] = (date_df.loc[d,"close"] >= ko_dict[d]).copy()
+        date_df.loc[d,"ko"] = date_df.loc[d,"close"] >= ko_dict[d]
         if date_df.loc[d,"ko"]:
             delta = (d - Ob_date).days
             grid[:, delta:] = 0
@@ -38,7 +36,7 @@ def update_out_grid(grid,date_df,ko_dict):
     return grid
 
 
-def gridval(grid, S, k,ko_dict ): ## extracting grid value for S at time k
+def gridval(grid, S, k,ko_dict): ## extracting grid value for S at time k
     m = 800
     S_max = 4.0*max(ko_dict.values())
     S_min = 0.0
